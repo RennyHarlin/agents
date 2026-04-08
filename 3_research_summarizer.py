@@ -94,6 +94,7 @@ def plan(state: ResearchSummarizerAgentState) -> ResearchSummarizerAgentState:
     """
     plan = structured_llm.invoke(planning_prompt)
     state['subtopics'] = plan.subtopics
+    print(f"Plan: {state['subtopics']}")
     return state
 
 def retrieve_documents_from_vector_store(state: ResearchSummarizerAgentState) -> ResearchSummarizerAgentState:
@@ -107,6 +108,7 @@ def retrieve_documents_from_vector_store(state: ResearchSummarizerAgentState) ->
             state['search_docs'].append(subtopic)
         else:
             documents.append({subtopic: [result.page_content for result in results]})
+    print(f"Documents retrieved from vector store: {documents}")
     state['documents'] = documents
     return state
 
@@ -118,6 +120,7 @@ def search_web(state: ResearchSummarizerAgentState) -> ResearchSummarizerAgentSt
         results = search_tool.invoke(subtopic)
         search_docs.append({subtopic: results})
     state['search_docs'] = search_docs
+    print(f"Documents retrieved from web search: {state['search_docs']}")
     return state
 
 def write_summary(state: ResearchSummarizerAgentState) -> ResearchSummarizerAgentState:
